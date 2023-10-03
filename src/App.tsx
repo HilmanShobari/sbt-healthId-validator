@@ -2,20 +2,32 @@
 
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Html5QrcodePlugin from './Html5QrcodePlugin.jsx';
+import Html5QrcodePlugin from './Html5QrcodePlugin.js';
 import axios from 'axios';
 
-const App = (props) => {
-     const [status, setStatus] = useState(null);
-     const [message, setMessage] = useState('');
-     const [data, setData] = useState('');
+const App = (props: any) => {
+     const [status, setStatus] = useState<boolean | null>(null);
+     const [message, setMessage] = useState<string>('');
+     const [data, setData] = useState<any>(null);
      const [loading, setLoading] = useState(false);
      const [decodedResults, setDecodedResults] = useState([]);
 
      const apiUrl = 'https://dev-e-wallet-api.qoincrypto.id/ids/check';
      const apiKey = 'Q97XCzBMH7xgqP7fLnK8kCYled';
 
-     const handleResult = async (result) => {
+     interface ResponseData {
+          status_code: number;
+          message: string;
+          data: {
+               name: string;
+               NIK: string;
+               dateOfBirth: string;
+               hospitalName: string;
+               hospitalAddress: string;
+          };
+     }
+
+     const handleResult = async (result: any) => {
           console.log('result', result);
           if (loading === true) return;
           try {
@@ -37,7 +49,7 @@ const App = (props) => {
                }
                setMessage(res.data?.message);
                setData(res.data?.data);
-          } catch (error) {
+          } catch (error: any) {
                setStatus(false);
                setMessage(error?.message);
           } finally {
@@ -93,7 +105,7 @@ const App = (props) => {
                                                   fps={50}
                                                   qrbox={350}
                                                   disableFlip={true}
-                                                  qrCodeSuccessCallback={(result) => {
+                                                  qrCodeSuccessCallback={(result: any) => {
                                                        if (!!result) {
                                                             handleResult(result);
                                                        }
